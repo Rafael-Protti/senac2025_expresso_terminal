@@ -1,0 +1,1 @@
+# senac2025_expresso_terminal
