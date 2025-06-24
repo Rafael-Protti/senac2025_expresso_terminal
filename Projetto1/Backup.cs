@@ -49,7 +49,7 @@ namespace Projetto1
             float velocidade = 0; //MIN=0; MAX=100; Aumenta e Freia com as Setinhas
             int carga = 10; //perde de passar com a velocidade errada nos obstáculos. Se = 0, fim de jogo (derrota).
             float combustivel = 100; //perde se passar muito acima ou muito abaixo da velocidade requerida pelo obstáculo. Consumido com o tempo. Se = 0, fim de jogo (derrota).
-            float distancia = 10; //indica quantos Km/m faltam para chegar na Estação. Ganha de = 0
+            float distancia = 10; //indica quantos Km/m faltam para chegar na Estação. Ganha se = 0
 
             //variáveis lógicas/bolenas do jogo
             bool direita = false; // Se verdadeiro, a locomotiva está na direita. Se falso, a locomotiva está na esquerda.
