@@ -16,7 +16,9 @@ namespace Projetto1
         static string trem = "        ____ __   _______ |[]|-||_  |_____|-|_____(_)  o=o=o  00=OO=o/\\o"; //desenho da locomotiva (os dois cotra-barras amarelos servem para desenhar um só e contam como UM caractér)
         static int tremX = 18; //largura (X) da locomotiva
         static int tremY = 4; //largura (Y) da locomotiva
-        static bool embaixo = false; // Se verdadeiro, a locomotiva no trilho de cima. Se falso, a locomotiva está no trilho de baixo.
+        
+        static int velocidade = 0;
+        static bool iniciar = false; //A locomotiva começa a se mexer se =TRUE
         static void Main()
         {
             Console.Clear();
@@ -60,7 +62,7 @@ namespace Projetto1
         static void Jogar()
         {
             //variáveis numéricas do jogo
-            float velocidade = 0; //MIN=0; MAX=100; Aumenta e Freia com as Setinhas
+            //MIN=0; MAX=100; Aumenta e Freia com as Setinhas
             int carga = 10; //perde de passar com a velocidade errada nos obstáculos. Se = 0, fim de jogo (derrota).
             float combustivel = 100; //perde se passar muito acima ou muito abaixo da velocidade requerida pelo obstáculo. Consumido com o tempo. Se = 0, fim de jogo (derrota).
 
@@ -78,13 +80,20 @@ namespace Projetto1
                     """);
                 if (playerX == 180)
                 {
-                    embaixo = false;
                     playerX = 1;
                     Main();
                 }
-
+                Console.WriteLine("Aperte J para começar o jogo");
                 var tecla = Console.ReadKey(true).Key;
-                AtualizarPosicao(tecla);
+                if (tecla == ConsoleKey.J)
+                {
+                    iniciar = true;
+                }
+
+                do
+                {
+                    AtualizarPosicao(tecla);
+                } while (iniciar == false);
 
             }
         }
@@ -143,16 +152,18 @@ namespace Projetto1
         }
         static void AtualizarPosicao(ConsoleKey tecla)
         {
+            
             int tempX = playerX;
             int tempY = playerY;
+            bool embaixo = false; // Se verdadeiro, a locomotiva no trilho de cima. Se falso, a locomotiva está no trilho de baixo.
 
             switch (tecla)
             {
                 case ConsoleKey.A:
-                    tempX--;
+                    velocidade--;
                     break;
                 case ConsoleKey.D:
-                    tempX++;
+                    velocidade++;
                     break;
                 case ConsoleKey.W:
                     embaixo = false;
