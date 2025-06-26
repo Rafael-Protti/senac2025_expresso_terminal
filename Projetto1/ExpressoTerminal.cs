@@ -2,11 +2,13 @@
 using System.ComponentModel.Design;
 using System.Runtime;
 using System.Runtime.ExceptionServices;
+using System.Timers;
 
 namespace Projetto1
 {
     class ExpressoTerminal
     {
+        public static System.Timers.Timer aTimer;
         static char[,] mapa; //variável CHAR que é usada para desenhar o mapa
         static int largura = 200; //largura (X) do mapa
         static int altura = 16; //altura (Y) do mapa
@@ -16,9 +18,9 @@ namespace Projetto1
         static string trem = "        ____ __   _______ |[]|-||_  |_____|-|_____(_)  o=o=o  00=OO=o/\\o"; //desenho da locomotiva (os dois cotra-barras amarelos servem para desenhar um só e contam como UM caractér)
         static int tremX = 18; //largura (X) da locomotiva
         static int tremY = 4; //largura (Y) da locomotiva
-        
         static int velocidade = 0;
-        static bool iniciar = false; //A locomotiva começa a se mexer se =TRUE
+        static bool embaixo = false; // Se verdadeiro, a locomotiva no trilho de cima. Se falso, a locomotiva está no trilho de baixo.
+        static int nivel = 1; //dita qual layout de qual nível vai carregar (1 -> nível 1, 2 -> nível 2, 3 -> nível 3
         static void Main()
         {
             Console.Clear();
@@ -78,23 +80,29 @@ namespace Projetto1
                     Combustível: {combustivel}
                     Distância: {playerX}
                     """);
-                if (playerX == 180)
+
+                if (playerX == 20)
                 {
+                    nivel = nivel + 1;
+                    if (nivel < 4)
+                    {
+                        playerX = 1;
+                        IniciarMapa();
+                        Console.Clear();
+                        DesenharMapa();
+                    }
+                }
+
+                if (nivel > 3)
+                {
+                    Console.Write("VOCÊ VENCEU!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    Thread.Sleep(2000);
                     playerX = 1;
+                    nivel = 1;
                     Main();
                 }
-                Console.WriteLine("Aperte J para começar o jogo");
                 var tecla = Console.ReadKey(true).Key;
-                if (tecla == ConsoleKey.J)
-                {
-                    iniciar = true;
-                }
-
-                do
-                {
-                    AtualizarPosicao(tecla);
-                } while (iniciar == false);
-
+                AtualizarPosicao(tecla);
             }
         }
 
@@ -118,25 +126,40 @@ namespace Projetto1
                 }
             }
 
-            for(int x = 1; x < largura - 1; x++)
+            for (int x = 1; x < largura - 1; x++) //desenha o trilho de cima
             {
                 mapa[x, 5] = '|';
             }
 
-            for (int x = 1; x < largura - 1; x++)
+            for (int x = 1; x < largura - 1; x++) //desenha o trilho de baixo
             {
                 mapa[x, 10] = '|';
             }
 
-
-            for (int y = 0; y < tremY; y++)
+            if (nivel == 1)
             {
-                for (int x = 0; x < tremX; x++)
-                {
-                    mapa[playerX + x, playerY + y] = trem[y * tremX + x];
-                }
-                Console.WriteLine();
+                mapa[50, 1] = '1';
             }
+
+            else if (nivel == 2)
+            {
+                mapa[50, 1] = '2';
+            }
+
+            else
+            {
+                mapa[50, 1] = '3';
+            }
+
+
+                for (int y = 0; y < tremY; y++) //desenha a locomotiva
+                {
+                    for (int x = 0; x < tremX; x++)
+                    {
+                        mapa[playerX + x, playerY + y] = trem[y * tremX + x];
+                    }
+                    Console.WriteLine();
+                }
         }
         static void DesenharMapa()
         {
@@ -152,24 +175,28 @@ namespace Projetto1
         }
         static void AtualizarPosicao(ConsoleKey tecla)
         {
-            
+
             int tempX = playerX;
             int tempY = playerY;
-            bool embaixo = false; // Se verdadeiro, a locomotiva no trilho de cima. Se falso, a locomotiva está no trilho de baixo.
+            
 
             switch (tecla)
             {
                 case ConsoleKey.A:
                     velocidade--;
+                    tempX--;
                     break;
                 case ConsoleKey.D:
                     velocidade++;
+                    tempX++;
                     break;
                 case ConsoleKey.W:
                     embaixo = false;
+                    //tempY--;
                     break;
                 case ConsoleKey.S:
                     embaixo = true;
+                    //tempY++;
                     break;
                 case ConsoleKey.L:
                     playerX = 1;
@@ -177,14 +204,11 @@ namespace Projetto1
                     Main();
                     break;
             }
-            if (embaixo == false) //posiciona a locomotiva no trilho de cima e no trilho de baixo.
-            {
-                tempY = 2;
-            }
-            else
+
+            if (embaixo) //posiciona a locomotiva no trilho de cima e no trilho de baixo.
             {
                 tempY = 7;
-            }
+            } else { tempY = 2; }
 
             if (mapa[tempX, tempY] != '#' && mapa[tempX + tremX, tempY + tremY] != '#')
             {
@@ -196,12 +220,12 @@ namespace Projetto1
                     }
                 }
 
-                for (int x = 0; x < tremX; x++) //Redesenha o trilho no Y=5
+                for (int x = 0; x < tremX; x++) //Redesenha o trilho no Y = 5
                 {
                     mapa[playerX + x, 5] = '|';
                 }
 
-                for (int x = 0; x < tremX; x++) //Redesenha o trilho no y=10
+                for (int x = 0; x < tremX; x++) //Redesenha o trilho no y = 10
                 {
                     mapa[playerX + x, 10] = '|';
                 }
@@ -217,7 +241,20 @@ namespace Projetto1
                 playerX = tempX;
                 playerY = tempY;
             }
+
         }
+        static void Temporizador()
+        {
+            aTimer = new System.Timers.Timer(2000);
+            aTimer.Elapsed += MovimentoHorizontal;
+            aTimer.AutoReset = true;
+            aTimer.Enabled = true;
+        }
+        static void MovimentoHorizontal(Object source,ElapsedEventArgs e)
+        {
+            playerX++;
+        }
+        
     }
 }
         
