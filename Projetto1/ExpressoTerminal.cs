@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Design;
 using System.Runtime;
+using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 using System.Timers;
 
@@ -15,12 +16,15 @@ namespace Projetto1
         static int playerX = 1; //posição (X) inicial do jogador
         static int playerY = 2; //posição (Y) inicial do jogador
         static bool rodando = true; //dita se o jogo está rodando ou não. Já vem como TRUE, se FALSO, o jogo fecha
+        static bool jogando = false;
         static string trem = "        ____ __   _______ |[]|-||_  |_____|-|_____(_)  o=o=o  00=OO=o/\\o"; //desenho da locomotiva (os dois cotra-barras amarelos servem para desenhar um só e contam como UM caractér)
         static int tremX = 18; //largura (X) da locomotiva
         static int tremY = 4; //largura (Y) da locomotiva
         static int velocidade = 0;
-        static bool embaixo = false; // Se verdadeiro, a locomotiva no trilho de cima. Se falso, a locomotiva está no trilho de baixo.
-        static int nivel = 1; //dita qual layout de qual nível vai carregar (1 -> nível 1, 2 -> nível 2, 3 -> nível 3
+        static bool embaixo; // Se verdadeiro, a locomotiva no trilho de cima. Se falso, a locomotiva está no trilho de baixo.
+        static int nivel; //dita qual layout de qual nível vai carregar (1 -> nível 1, 2 -> nível 2, 3 -> nível 3
+        static int carga; //perde de passar com a velocidade errada nos obstáculos. Se = 0, fim de jogo (derrota).
+        static float combustivel; //perde se passar muito acima ou muito abaixo da velocidade requerida pelo obstáculo. Consumido com o tempo. Se = 0, fim de jogo (derrota).
         static void Main()
         {
             Console.Clear();
@@ -39,6 +43,8 @@ namespace Projetto1
                 switch (botao.Key)
                 {
                     case ConsoleKey.J:
+                        ValoresPadrao();
+                        jogando = true;
                         Jogar();
                         break;
                     case ConsoleKey.K:
@@ -63,13 +69,8 @@ namespace Projetto1
 
         static void Jogar()
         {
-            //variáveis numéricas do jogo
-            //MIN=0; MAX=100; Aumenta e Freia com as Setinhas
-            int carga = 10; //perde de passar com a velocidade errada nos obstáculos. Se = 0, fim de jogo (derrota).
-            float combustivel = 100; //perde se passar muito acima ou muito abaixo da velocidade requerida pelo obstáculo. Consumido com o tempo. Se = 0, fim de jogo (derrota).
-
             IniciarMapa();
-            while (rodando)
+            while (jogando)
             {
                 Console.Clear();
                 DesenharMapa();
@@ -79,6 +80,7 @@ namespace Projetto1
                     Carga: {carga}
                     Combustível: {combustivel}
                     Distância: {playerX}
+                    Nível: {nivel}
                     """);
 
                 if (playerX == 20)
@@ -87,23 +89,25 @@ namespace Projetto1
                     if (nivel < 4)
                     {
                         playerX = 1;
-                        IniciarMapa();
-                        Console.Clear();
-                        DesenharMapa();
+                        Jogar();
                     }
                 }
 
                 if (nivel > 3)
                 {
-                    Console.Write("VOCÊ VENCEU!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                    Thread.Sleep(2000);
-                    playerX = 1;
-                    nivel = 1;
-                    Main();
+                    jogando = false;
                 }
+
+                if (combustivel == 0 || carga == 0)
+                {
+                    jogando = false;
+                }
+
                 var tecla = Console.ReadKey(true).Key;
                 AtualizarPosicao(tecla);
             }
+            TelaFimJogo();
+
         }
 
         static void IniciarMapa()
@@ -199,9 +203,14 @@ namespace Projetto1
                     //tempY++;
                     break;
                 case ConsoleKey.L:
-                    playerX = 1;
-                    playerY = 2;
+                    ValoresPadrao();
                     Main();
+                    break;
+                case ConsoleKey.M:
+                    combustivel--;
+                    break;
+                case ConsoleKey.N:
+                    carga--;
                     break;
             }
 
@@ -243,6 +252,42 @@ namespace Projetto1
             }
 
         }
+
+        static void TelaFimJogo()
+        {
+            Console.Clear();
+            if (nivel > 3)
+            {
+                Console.WriteLine("Parabéns, você venceu!!! Fim de jogo!");
+            }
+            else 
+            { Console.WriteLine("Você perdeu!!! Fim de jogo!"); }
+                Console.WriteLine($"""
+                    Mercadoria entregue: {carga} Ton
+                    Combustível restante: {combustivel} Kg
+                    Distância percorrida {playerX} Km
+                    """);
+            var botao = Console.ReadKey(true);
+            switch(botao.Key)
+            {
+                case(ConsoleKey.L):
+                    ValoresPadrao();
+                    Main();
+                    break;
+            }
+            
+        }
+        static void ValoresPadrao()
+        {
+            carga = 10;
+            combustivel = 100;
+            velocidade = 0;
+            playerX = 1;
+            playerY = 2;
+            embaixo = false;
+            nivel = 1;
+        }
+        
         static void Temporizador()
         {
             aTimer = new System.Timers.Timer(2000);
