@@ -11,7 +11,7 @@ namespace Projetto1
     {
         public static System.Timers.Timer aTimer;
         static char[,] mapa; //variável CHAR que é usada para desenhar o mapa
-        static int largura = 200; //largura (X) do mapa
+        static int largura = 201; //largura (X) do mapa
         static int altura = 16; //altura (Y) do mapa
         static int playerX = 1; //posição (X) inicial do jogador
         static int playerY = 2; //posição (Y) inicial do jogador
@@ -25,6 +25,7 @@ namespace Projetto1
         static int nivel; //dita qual layout de qual nível vai carregar (1 -> nível 1, 2 -> nível 2, 3 -> nível 3
         static int carga; //perde de passar com a velocidade errada nos obstáculos. Se = 0, fim de jogo (derrota).
         static float combustivel; //perde se passar muito acima ou muito abaixo da velocidade requerida pelo obstáculo. Consumido com o tempo. Se = 0, fim de jogo (derrota).
+        static int locomocao;
         static void Main()
         {
             Console.Clear();
@@ -83,7 +84,13 @@ namespace Projetto1
                     Nível: {nivel}
                     """);
 
-                if (playerX == 20)
+                if (nivel < 4)
+                {
+                    var tecla = Console.ReadKey(true).Key;
+                    AtualizarPosicao(tecla);
+                }
+
+                if (playerX >= 175)
                 {
                     nivel = nivel + 1;
                     if (nivel < 4)
@@ -93,19 +100,12 @@ namespace Projetto1
                     }
                 }
 
-                if (nivel > 3)
+                if (nivel > 3 || combustivel == 0 || carga == 0)
                 {
                     jogando = false;
                 }
-
-                if (combustivel == 0 || carga == 0)
-                {
-                    jogando = false;
-                }
-
-                var tecla = Console.ReadKey(true).Key;
-                AtualizarPosicao(tecla);
             }
+            Console.ReadKey();
             TelaFimJogo();
 
         }
@@ -130,14 +130,23 @@ namespace Projetto1
                 }
             }
 
+            if (nivel < 3)
+            {
+                for (int y = 1; y < altura - 1; y++)
+                {
+                    mapa[189, y] = '-';
+                    mapa[190, y] = '>';
+                }
+            }
+
             for (int x = 1; x < largura - 1; x++) //desenha o trilho de cima
             {
-                mapa[x, 5] = '|';
+                mapa[x, 5] = 'I';
             }
 
             for (int x = 1; x < largura - 1; x++) //desenha o trilho de baixo
             {
-                mapa[x, 10] = '|';
+                mapa[x, 10] = 'I';
             }
 
             if (nivel == 1)
@@ -145,25 +154,51 @@ namespace Projetto1
                 mapa[50, 1] = '1';
             }
 
-            else if (nivel == 2)
+            if (nivel == 2)
             {
                 mapa[50, 1] = '2';
             }
 
             else
             {
+
+                for (int y = 2; y < altura - 1; y++)
+                {
+                    mapa[187, y] = '|';
+                    mapa[199, y] = '|';
+                }
+                
+                for (int x = 188; x < largura - 2; x++)
+                {
+                    mapa[x, 1] = '-';
+                    mapa[x, 14] = '_';
+                }
+
                 mapa[50, 1] = '3';
+                mapa[190, 1] = 'E';
+                mapa[191, 1] = 'S';
+                mapa[192, 1] = 'T';
+                mapa[193, 1] = 'A';
+                mapa[194, 1] = 'Ç';
+                mapa[195, 1] = 'Ã';
+                mapa[196, 1] = 'O';
+                mapa[199, 1] = '.';
+                mapa[187, 1] = '.';
+                mapa[187, 5] = 'I';
+                mapa[187, 10] = 'I';
             }
 
-
-                for (int y = 0; y < tremY; y++) //desenha a locomotiva
+            for (int y = 0; y < tremY; y++) //desenha a locomotiva
+            {
+                for (int x = 0; x < tremX; x++)
                 {
-                    for (int x = 0; x < tremX; x++)
-                    {
-                        mapa[playerX + x, playerY + y] = trem[y * tremX + x];
-                    }
-                    Console.WriteLine();
+                    mapa[playerX + x, playerY + y] = trem[y * tremX + x];
                 }
+                Console.WriteLine();
+            }
+
+            
+
         }
         static void DesenharMapa()
         {
@@ -182,17 +217,18 @@ namespace Projetto1
 
             int tempX = playerX;
             int tempY = playerY;
-            
 
             switch (tecla)
             {
                 case ConsoleKey.A:
-                    velocidade--;
-                    tempX--;
+                    if (velocidade > 0) { velocidade = velocidade - 5; };
                     break;
                 case ConsoleKey.D:
-                    velocidade++;
-                    tempX++;
+                    if (velocidade < 120) { velocidade = velocidade + 5; };
+                    break;
+                case ConsoleKey.F:
+                    MovimentoVelocidade();
+                    tempX = tempX + locomocao;
                     break;
                 case ConsoleKey.W:
                     embaixo = false;
@@ -231,12 +267,12 @@ namespace Projetto1
 
                 for (int x = 0; x < tremX; x++) //Redesenha o trilho no Y = 5
                 {
-                    mapa[playerX + x, 5] = '|';
+                    mapa[playerX + x, 5] = 'I';
                 }
 
                 for (int x = 0; x < tremX; x++) //Redesenha o trilho no y = 10
                 {
-                    mapa[playerX + x, 10] = '|';
+                    mapa[playerX + x, 10] = 'I';
                 }
 
                 for (int y = 0; y < tremY; y++)
@@ -255,6 +291,7 @@ namespace Projetto1
 
         static void TelaFimJogo()
         {
+            bool antisaida = true; //criado para evitar que a tela saia antes de selecionar a tecla correta.
             Console.Clear();
             if (nivel > 3)
             {
@@ -266,16 +303,22 @@ namespace Projetto1
                     Mercadoria entregue: {carga} Ton
                     Combustível restante: {combustivel} Kg
                     Distância percorrida {playerX} Km
+
+                    Aperte L para sair.
                     """);
-            var botao = Console.ReadKey(true);
-            switch(botao.Key)
+            do
             {
-                case(ConsoleKey.L):
-                    ValoresPadrao();
-                    Main();
-                    break;
-            }
-            
+                var tecla2 = Console.ReadKey(true);
+                switch (tecla2.Key)
+                {
+                    case ConsoleKey.L:
+                        antisaida = false;
+                        ValoresPadrao();
+                        Main();
+                        break;
+                }
+            } while (antisaida);
+
         }
         static void ValoresPadrao()
         {
@@ -285,7 +328,31 @@ namespace Projetto1
             playerX = 1;
             playerY = 2;
             embaixo = false;
-            nivel = 1;
+            nivel = 3;
+        }
+
+        static void MovimentoVelocidade()
+        {
+            if (velocidade >= 5 && velocidade <= 25)
+            {
+                locomocao = 1; //andar 1 espaço
+            }
+            if (velocidade >= 26 &&  velocidade <= 55)
+            {
+                locomocao = 2; //andar 2 espaços
+            }
+            if (velocidade >= 56 && velocidade <= 75)
+            {
+                locomocao = 3; //andar 3 espaços
+            }
+            if (velocidade >= 76 && velocidade <= 95)
+            {
+                locomocao = 4; //andar 4 espaços
+            }
+            if (velocidade >= 96 && velocidade <= 120)
+            {
+                locomocao = 5; //andar 5 espaços
+            }
         }
         
         static void Temporizador()
