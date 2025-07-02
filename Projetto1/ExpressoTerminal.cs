@@ -5,18 +5,25 @@ using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 using System.Timers;
 
+
+//Mover a movimentação atual para a Classe Personagem
+//Criar os obstáculos e suas consequências (Usar Orientação voltada a Objeto e Polimorfismo)
+//Criar o gasto do combustível passivo (o gasto padrão, desconsiderando os obstáculos)
+//Movimentação automática (esperar aula de Thread)
+
+
 namespace Projetto1
 {
     class ExpressoTerminal
     {
         public static System.Timers.Timer aTimer;
         static char[,] mapa; //variável CHAR que é usada para desenhar o mapa
-        static int largura = 201; //largura (X) do mapa
+        static int largura = 185; //largura (X) do mapa
         static int altura = 16; //altura (Y) do mapa
         static int playerX = 1; //posição (X) inicial do jogador
         static int playerY = 2; //posição (Y) inicial do jogador
         static bool rodando = true; //dita se o jogo está rodando ou não. Já vem como TRUE, se FALSO, o jogo fecha
-        static bool jogando = false;
+        static bool jogando = false; //dita se a gameplay está rodando ou não.
         static string trem = "        ____ __   _______ |[]|-||_  |_____|-|_____(_)  o=o=o  00=OO=o/\\o"; //desenho da locomotiva (os dois cotra-barras amarelos servem para desenhar um só e contam como UM caractér)
         static int tremX = 18; //largura (X) da locomotiva
         static int tremY = 4; //largura (Y) da locomotiva
@@ -25,7 +32,8 @@ namespace Projetto1
         static int nivel; //dita qual layout de qual nível vai carregar (1 -> nível 1, 2 -> nível 2, 3 -> nível 3
         static int carga; //perde de passar com a velocidade errada nos obstáculos. Se = 0, fim de jogo (derrota).
         static float combustivel; //perde se passar muito acima ou muito abaixo da velocidade requerida pelo obstáculo. Consumido com o tempo. Se = 0, fim de jogo (derrota).
-        static int locomocao;
+        static int locomocao; //quantos espaços a locomotiva vai andar. 
+        static int percorrido = 0; //quantos Xs foram andados (usado para a exibição da distância percorrida)
         static void Main()
         {
             Console.Clear();
@@ -70,37 +78,39 @@ namespace Projetto1
 
         static void Jogar()
         {
+            
             IniciarMapa();
             while (jogando)
             {
+                int distancia = percorrido + playerX;
                 Console.Clear();
                 DesenharMapa();
-
                 Console.WriteLine($"""
-                    Velocidade: {velocidade}
-                    Carga: {carga}
-                    Combustível: {combustivel}
-                    Distância: {playerX}
-                    Nível: {nivel}
+                    Velocidade:{velocidade}
+                    Carga:{carga}
+                    Combustível:{combustivel}
+                    Distância:{distancia}
+                    Nível:{nivel}
                     """);
 
-                if (nivel < 4)
+                if (nivel < 5)
                 {
                     var tecla = Console.ReadKey(true).Key;
                     AtualizarPosicao(tecla);
                 }
 
-                if (playerX >= 175)
+                if (playerX >= 160 && nivel < 4)
                 {
+                    percorrido += playerX;
                     nivel = nivel + 1;
-                    if (nivel < 4)
+                    if (nivel < 5)
                     {
                         playerX = 1;
                         Jogar();
                     }
                 }
 
-                if (nivel > 3 || combustivel == 0 || carga == 0)
+                if (nivel > 4 || combustivel <= 0 || carga <= 0 || nivel == 4 && playerX >= 160)
                 {
                     jogando = false;
                 }
@@ -113,6 +123,9 @@ namespace Projetto1
         static void IniciarMapa()
         {
             mapa = new char[largura, altura];
+            string descida = "iiiiiiiiii";
+            string subida = "||||||||||";
+            char[] descida2 = descida.ToCharArray();
 
             for (int y = 0; y < altura; y++)
             {
@@ -130,12 +143,12 @@ namespace Projetto1
                 }
             }
 
-            if (nivel < 3)
+            if (nivel < 4)
             {
                 for (int y = 1; y < altura - 1; y++)
                 {
-                    mapa[189, y] = '-';
-                    mapa[190, y] = '>';
+                    mapa[159, y] = '-';
+                    mapa[160, y] = '>';
                 }
             }
 
@@ -152,6 +165,7 @@ namespace Projetto1
             if (nivel == 1)
             {
                 mapa[50, 1] = '1';
+                mapa[40, 5] = descida2[9];
             }
 
             if (nivel == 2)
@@ -159,33 +173,40 @@ namespace Projetto1
                 mapa[50, 1] = '2';
             }
 
-            else
+            if (nivel == 3)
+            {
+                mapa[50, 1] = '3';
+            }
+
+            if (nivel == 4)
             {
 
                 for (int y = 2; y < altura - 1; y++)
                 {
-                    mapa[187, y] = '|';
-                    mapa[199, y] = '|';
+                    mapa[160, y] = '|';
+                    mapa[182, y] = '|';
                 }
                 
-                for (int x = 188; x < largura - 2; x++)
+                for (int x = 161; x < largura - 3; x++)
                 {
                     mapa[x, 1] = '-';
                     mapa[x, 14] = '_';
                 }
 
-                mapa[50, 1] = '3';
-                mapa[190, 1] = 'E';
-                mapa[191, 1] = 'S';
-                mapa[192, 1] = 'T';
-                mapa[193, 1] = 'A';
-                mapa[194, 1] = 'Ç';
-                mapa[195, 1] = 'Ã';
-                mapa[196, 1] = 'O';
-                mapa[199, 1] = '.';
-                mapa[187, 1] = '.';
-                mapa[187, 5] = 'I';
-                mapa[187, 10] = 'I';
+                mapa[50, 1] = '4';
+                mapa[168, 1] = 'E';
+                mapa[169, 1] = 'S';
+                mapa[170, 1] = 'T';
+                mapa[171, 1] = 'A';
+                mapa[172, 1] = 'Ç';
+                mapa[173, 1] = 'Ã';
+                mapa[174, 1] = 'O';
+                mapa[182, 1] = '.';
+                mapa[160, 1] = '.';
+                mapa[160, 5] = 'I';
+                mapa[160, 10] = 'I';
+                mapa[182, 5] = 'I';
+                mapa[182, 10] = 'I';
             }
 
             for (int y = 0; y < tremY; y++) //desenha a locomotiva
@@ -228,7 +249,8 @@ namespace Projetto1
                     break;
                 case ConsoleKey.F:
                     MovimentoVelocidade();
-                    tempX = tempX + locomocao;
+                    tempX +=locomocao;
+                    GastoCombustivel();
                     break;
                 case ConsoleKey.W:
                     embaixo = false;
@@ -293,19 +315,21 @@ namespace Projetto1
         {
             bool antisaida = true; //criado para evitar que a tela saia antes de selecionar a tecla correta.
             Console.Clear();
-            if (nivel > 3)
+            if (nivel > 4)
             {
                 Console.WriteLine("Parabéns, você venceu!!! Fim de jogo!");
             }
             else 
             { Console.WriteLine("Você perdeu!!! Fim de jogo!"); }
-                Console.WriteLine($"""
-                    Mercadoria entregue: {carga} Ton
+
+            Console.WriteLine($"""
+                    Mercadoria entregue: {carga} To
                     Combustível restante: {combustivel} Kg
-                    Distância percorrida {playerX} Km
+                    Distância percorrida {percorrido + playerX} Km
 
                     Aperte L para sair.
                     """);
+
             do
             {
                 var tecla2 = Console.ReadKey(true);
@@ -323,16 +347,18 @@ namespace Projetto1
         static void ValoresPadrao()
         {
             carga = 10;
-            combustivel = 100;
+            combustivel = 10000;
             velocidade = 0;
             playerX = 1;
             playerY = 2;
             embaixo = false;
-            nivel = 3;
+            nivel = 1;
+            percorrido = 0;
         }
 
         static void MovimentoVelocidade()
         {
+            if (velocidade == 0) { locomocao = 0; }
             if (velocidade >= 5 && velocidade <= 25)
             {
                 locomocao = 1; //andar 1 espaço
@@ -366,7 +392,13 @@ namespace Projetto1
         {
             playerX++;
         }
-        
+
+        static void GastoCombustivel()
+        {
+            combustivel -= locomocao*10;
+            if (playerX <= 50 && playerX >= 40 && playerY == 2 && velocidade > 30)
+            { combustivel = combustivel - 2000; }
+        }
     }
 }
         
