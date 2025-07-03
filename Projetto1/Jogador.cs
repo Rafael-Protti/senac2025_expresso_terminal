@@ -32,22 +32,5 @@ namespace Projetto1
             this.x = x;
             this.y = y;
         }
-
-        class Obstaculos
-        {
-            public int x { get; set; }
-            public int y { get; set; }
-            public string nome { get; set; }
-        }
-
-        class Subida:Obstaculos
-        {
-
-        }
-
-        class Descida:Obstaculos
-        {
-
-        }
     }
 }

@@ -8,8 +8,8 @@ using System.Timers;
 
 //Mover a movimentação atual para a Classe Personagem
 //Criar os obstáculos e suas consequências (Usar Orientação voltada a Objeto e Polimorfismo)
-//Criar o gasto do combustível passivo (o gasto padrão, desconsiderando os obstáculos)
 //Movimentação automática (esperar aula de Thread)
+//Criar obstaculos aleatoriamente no mapa
 
 
 namespace Projetto1
@@ -24,7 +24,7 @@ namespace Projetto1
         static int playerY = 2; //posição (Y) inicial do jogador
         static bool rodando = true; //dita se o jogo está rodando ou não. Já vem como TRUE, se FALSO, o jogo fecha
         static bool jogando = false; //dita se a gameplay está rodando ou não.
-        static string trem = "        ____ __   _______ |[]|-||_  |_____|-|_____(_)  o=o=o  00=OO=o/\\o"; //desenho da locomotiva (os dois cotra-barras amarelos servem para desenhar um só e contam como UM caractér)
+        static string trem = "        ____ __   _______ |[]|-||_  |_____|-|_____(_)  o=o=o  00=OO=o/\\o"; //desenho da locomotiva (os dois con tra-barras amarelos servem para desenhar um só e contam como UM caractér)
         static int tremX = 18; //largura (X) da locomotiva
         static int tremY = 4; //largura (Y) da locomotiva
         static int velocidade = 0;
@@ -123,10 +123,13 @@ namespace Projetto1
         static void IniciarMapa()
         {
             mapa = new char[largura, altura];
-            string descida = "iiiiiiiiii";
-            string subida = "||||||||||";
-            char[] descida2 = descida.ToCharArray();
-
+            char descida = 'i';
+            int descidaX;
+            int descidaY;
+            char subida = '|';
+            List<int> subidaX;
+            int subidaY;
+            
             for (int y = 0; y < altura; y++)
             {
                 for (int x = 0; x < largura; x++)
@@ -165,7 +168,10 @@ namespace Projetto1
             if (nivel == 1)
             {
                 mapa[50, 1] = '1';
-                mapa[40, 5] = descida2[9];
+                for (int x = 40; x < 51; x++)
+                {
+                    mapa[x, 5] = descida;
+                }
             }
 
             if (nivel == 2)
