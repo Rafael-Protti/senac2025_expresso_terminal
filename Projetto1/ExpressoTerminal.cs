@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 using System.Timers;
 
-
+//HOJE: Transformar movimentação em CLASSE
 //Mover a movimentação atual para a Classe Personagem
 //Criar os obstáculos e suas consequências (Usar Orientação voltada a Objeto e Polimorfismo)
 //Movimentação automática (esperar aula de Thread)
@@ -116,7 +116,7 @@ namespace Projetto1
                 }
             }
             Console.ReadKey();
-            TelaFimJogo();
+            if (jogando == false && rodando == true) { TelaFimJogo(); }
 
         }
 
@@ -267,6 +267,7 @@ namespace Projetto1
                     //tempY++;
                     break;
                 case ConsoleKey.L:
+                    jogando = false;
                     ValoresPadrao();
                     Main();
                     break;
@@ -321,7 +322,7 @@ namespace Projetto1
         {
             bool antisaida = true; //criado para evitar que a tela saia antes de selecionar a tecla correta.
             Console.Clear();
-            if (nivel > 4)
+            if (nivel > 5)
             {
                 Console.WriteLine("Parabéns, você venceu!!! Fim de jogo!");
             }

@@ -88,3 +88,54 @@ namespace Projetto1
         }
     }
 }
+
+
+/*Singleton
+	player
+	hud
+	mapa
+	menu
+	jogo (GameManager)
+---
+class GameManager
+{
+	private GameManager() {}
+	private GameManager instancia;
+	*static public GameManager Instancia => instancia??=new GameManager();
+	public Player p1;
+	public HUD hdu;
+	public Mapa mapa;
+
+}
+
+class Player
+{
+	private Player() {}
+	private Player instancia;
+	static public Player Instancia => instancia??=new Player();
+	
+	public list<Item> iventario;
+	private stirng nome
+
+}
+
+public void Jogo()
+{
+	GameManager.Instancia.p1.Inventario.Ad(...)
+	ou
+	GameManager g = GameManager.Instancia;
+	Player p=g.p1
+	p.Inventario.Add(new Item());
+}
+--
+	static//acessa pela classe// public//acessa de fora// GameManager//retorna a classe// Instancia()//nome da função
+--
+{
+	*if (instancia != null)
+	{
+		return instancia;
+	}
+	instancia = new GameManager();
+	return instancia;
+}
+ */
