@@ -15,39 +15,113 @@ namespace Projetto1
         //private static Locomotiva instancia;
         //static public Locomotiva Instancia => instancia??=new Locomotiva();
 
-        public int x;
-        public int y;
+        public int playerX;
+        public int playerY;
         string trem = "        ____ __   _______ |[]|-||_  |_____|-|_____(_)  o=o=o  00=OO=o/\\o";
         public int tremX = 18;
         public int tremY = 4;
         public int velocidade = 0;
         public bool embaixo = false;
         public int locomocao;
+        public int combustivel = 10000;
+
+        Vector2 pos = new Vector2(1, 1);
 
         public Locomotiva(int x, int y)
         {
-            this.x = x;
-            this.y = y;
+            this.pos = new Vector2(x, y);
         }
-        public int Teclas(ConsoleKey tecla)
+        public void DesenharLocomotiva()
         {
+            for (int y = 0; y < tremY; y++) //desenha a locomotiva
+            {
+                for (int x = 0; x < tremX; x++)
+                {
+                    mapa[playerX + x, playerY + y] = trem[y * tremX + x];
+                }
+                Console.WriteLine();
+            }
+        }
+        public void AtualizarPosicao(ConsoleKey tecla)
+        {
+
+            int oldX = pos.x;
+            int oldY = pos.y;
+            int x = pos.x;
+            int y = pos.y;
+
             switch (tecla)
             {
-                case ConsoleKey.R:
-                    Movimento();
-                    x += locomocao;
-                    return x;
+                case ConsoleKey.A:
+                    if (velocidade > 0) { velocidade = velocidade - 5; };
+                    break;
+                case ConsoleKey.D:
+                    if (velocidade < 120) { velocidade = velocidade + 5; };
+                    break;
                 case ConsoleKey.F:
-                    TrocarTrilho();
+                    Movimento();
+                    oldX += locomocao;
+                    GastoCombustivel();
                     break;
-                case ConsoleKey.C:
-                    DiminuirVelocidade();
+                case ConsoleKey.W:
+                    embaixo = false;
+                    //tempY--;
                     break;
-                case ConsoleKey.V:
-                    AumentarVelocidade();
+                case ConsoleKey.S:
+                    embaixo = true;
+                    //tempY++;
+                    break;
+                case ConsoleKey.L:
+                    jogorodando = false;
+                    ValoresPadrao();
+                    Main();
+                    break;
+                case ConsoleKey.M:
+                    combustivel--;
+                    break;
+                case ConsoleKey.N:
+                    carga--;
                     break;
             }
-            return x;
+
+            if (embaixo) //posiciona a locomotiva no trilho de cima e no trilho de baixo.
+            {
+                oldY = 7;
+            }
+            else { oldY = 2; }
+
+            if (mapa[oldX, oldY] != '#' && mapa[oldX + tremX, oldY + tremY] != '#')
+            {
+                for (int y = 0; y < tremY; y++)
+                {
+                    for (int x = 0; x < tremX; x++)
+                    {
+                        mapa[playerX + x, playerY + y] = ' ';
+                    }
+                }
+
+                for (int x = 0; x < tremX; x++) //Redesenha o trilho no Y = 5
+                {
+                    mapa[playerX + x, 5] = 'I';
+                }
+
+                for (int x = 0; x < tremX; x++) //Redesenha o trilho no y = 10
+                {
+                    mapa[playerX + x, 10] = 'I';
+                }
+
+                for (int y = 0; y < tremY; y++)
+                {
+                    for (int x = 0; x < tremX; x++)
+                    {
+                        mapa[oldX + x, oldY + y] = trem[y * tremX + x];
+                    }
+                }
+
+                playerX = oldX;
+                playerY = oldY;
+            }
+
         }
 
         private void Movimento()
@@ -95,6 +169,12 @@ namespace Projetto1
                 embaixo = false;
                 y = 2;
             }
+        }
+        private void GastoCombustivel()
+        {
+            combustivel -= locomocao * 10;
+            if (playerX <= 50 && playerX >= 40 && playerY == 2 && velocidade > 30)
+            { combustivel = combustivel - 2000; }
         }
     }
 }

@@ -26,6 +26,7 @@ namespace Projetto1
                  °---------------°
                 """);
                 Console.ResetColor();
+                BotoesMenu();
 
             } while (jogorodando);
             Console.Clear ();
@@ -39,11 +40,21 @@ namespace Projetto1
                 case ConsoleKey.J: //redireciona para a gameplay
                     break;
                 case ConsoleKey.K: //redireciona para créditos
+                    Creditos();
                     break;
                 case ConsoleKey.L: //fecha o jogo
                     jogorodando = false;
                     break;
             }
+        }
+        private void Creditos()
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("Instrutor: Marcius \nCriador: Rafael Protti");
+            Console.ResetColor();
+            Console.WriteLine("\nAperte qualquer tecla para voltar.");
+            Console.ReadKey();
         }
     }
 }
