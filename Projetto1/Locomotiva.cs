@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 
 namespace Projetto1
 {
-    class Locomotiva
+    class Locomotiva : MonoBehaviour
     {
         //private Locomotiva() { }
         //private static Locomotiva instancia;
@@ -29,6 +29,7 @@ namespace Projetto1
 
         public Locomotiva(int x, int y)
         {
+            Run();
             this.pos = new Vector2(x, y);
         }
         public void DesenharLocomotiva()
@@ -175,6 +176,17 @@ namespace Projetto1
             combustivel -= locomocao * 10;
             if (playerX <= 50 && playerX >= 40 && playerY == 2 && velocidade > 30)
             { combustivel = combustivel - 2000; }
+        }
+
+        public override void Update()
+        {
+            DesenharLocomotiva();
+        }
+
+        public override void LateUpdate()
+        {
+            var tecla = Console.ReadKey(true).Key;
+            AtualizarPosicao(tecla);
         }
     }
 }

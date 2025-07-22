@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 
 namespace Projetto1
 {
-    public class Mapa
+    public class Mapa : MonoBehaviour
     {
         public char[,] mapa; //variável CHAR que é usada para desenhar o mapa
         public int largura = 185; //largura (X) do mapa
         public int altura = 16; //altura (Y) do mapa
-        private Mapa() { }
+        private Mapa() {
+            Run();
+        }
+
         private static Mapa instancia;
         static public Mapa Instancia => instancia ??= new Mapa();
         private void IniciarMapa()
@@ -51,6 +54,16 @@ namespace Projetto1
                 Console.WriteLine();
             }
 
+        }
+
+        public override void Update()
+        {
+            DesenharMapa(); 
+        }
+
+        public override void Start()
+        {
+            IniciarMapa();
         }
     }
 
