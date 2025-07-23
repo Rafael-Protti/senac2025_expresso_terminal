@@ -10,14 +10,14 @@ namespace Projetto1
     {
         public int x { get; set; }
         public int y { get; set; }
-        public string forma { get; set; }
+        public string Forma { get; set; }
     }
 
     class Subida : Obstaculos
     {
         public Subida()
         {
-            forma = "||||||||||";
+            Forma = "||||||||||";
         }
 
 
@@ -31,7 +31,7 @@ namespace Projetto1
     {
         public Descida()
         {
-            forma = "iiiiiiiiii";
+            Forma = "iiiiiiiiii";
         }
         public void Consequencia()
         {

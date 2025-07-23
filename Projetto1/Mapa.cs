@@ -8,24 +8,19 @@ namespace Projetto1
 {
     public class Mapa : MonoBehaviour
     {
-        public char[,] mapa; //variável CHAR que é usada para desenhar o mapa
-        public int largura = 185; //largura (X) do mapa
-        public int altura = 16; //altura (Y) do mapa
         private Mapa() {
             Run();
         }
 
         private static Mapa instancia;
         static public Mapa Instancia => instancia ??= new Mapa();
+
+        public char[,] mapa; //variável CHAR que é usada para desenhar o mapa
+        public int largura = 185; //largura (X) do mapa
+        public int altura = 16; //altura (Y) do mapa
         private void IniciarMapa()
         {
             mapa = new char[largura, altura];
-            char descida = 'i';
-            int descidaX;
-            int descidaY;
-            char subida = '|';
-            List<int> subidaX;
-            int subidaY;
 
             for (int y = 0; y < altura; y++)
             {

@@ -23,7 +23,7 @@ namespace Projetto1
                         LateUpdate();
                         Thread.Sleep(800);
                     }
-                    OnDestroy();
+                    
                 }
                 );
 
@@ -33,6 +33,7 @@ namespace Projetto1
         public void Stop()
         {
             this.ativo = false;
+            OnDestroy();
             thread.Join();
         }
 

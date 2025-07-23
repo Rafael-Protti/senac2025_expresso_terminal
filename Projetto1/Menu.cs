@@ -6,16 +6,19 @@ using System.Threading.Tasks;
 
 namespace Projetto1
 {
-    internal class Menu
+    public class Menu : MonoBehaviour
     {
-        public bool jogorodando = true;
-        public Menu()
+        private Menu()
         {
-            do
-            {
-                Console.Clear();
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write("""
+            Run();
+        }
+        private static Menu instancia;
+        static public Menu Instancia => instancia ??= new Menu();
+        public override void Update()
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("""
                 .-----------------.
                 |EXPRESSO TERMINAL|
                 º-----------------°
@@ -25,12 +28,8 @@ namespace Projetto1
                  |-> Sair     [L]|
                  °---------------°
                 """);
-                Console.ResetColor();
-                BotoesMenu();
-
-            } while (jogorodando);
-            Console.Clear ();
-            Console.WriteLine("Obrigado por jogar!");
+            Console.ResetColor();
+            BotoesMenu();
         }
         private void BotoesMenu()
         {
@@ -38,12 +37,14 @@ namespace Projetto1
             switch (botao.Key)
             {
                 case ConsoleKey.J: //redireciona para a gameplay
+                    GameManager.Instancia.jogando = true;
                     break;
                 case ConsoleKey.K: //redireciona para créditos
                     Creditos();
                     break;
                 case ConsoleKey.L: //fecha o jogo
-                    jogorodando = false;
+                    GameManager.Instancia.Stop();
+                    Stop();
                     break;
             }
         }

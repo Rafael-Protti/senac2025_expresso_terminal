@@ -27,18 +27,18 @@ namespace Projetto1
 
         Vector2 pos = new Vector2(1, 1);
 
-        public Locomotiva(int x, int y)
+        public Locomotiva()
         {
             Run();
-            this.pos = new Vector2(x, y);
         }
         public void DesenharLocomotiva()
         {
+            Console.SetCursorPosition(pos.x, pos.y);
             for (int y = 0; y < tremY; y++) //desenha a locomotiva
             {
                 for (int x = 0; x < tremX; x++)
                 {
-                    mapa[playerX + x, playerY + y] = trem[y * tremX + x];
+                    Console.Write(trem[y * tremX + x]);
                 }
                 Console.WriteLine();
             }
@@ -73,54 +73,12 @@ namespace Projetto1
                     //tempY++;
                     break;
                 case ConsoleKey.L:
-                    jogorodando = false;
-                    ValoresPadrao();
-                    Main();
                     break;
                 case ConsoleKey.M:
                     combustivel--;
                     break;
                 case ConsoleKey.N:
-                    carga--;
                     break;
-            }
-
-            if (embaixo) //posiciona a locomotiva no trilho de cima e no trilho de baixo.
-            {
-                oldY = 7;
-            }
-            else { oldY = 2; }
-
-            if (mapa[oldX, oldY] != '#' && mapa[oldX + tremX, oldY + tremY] != '#')
-            {
-                for (int y = 0; y < tremY; y++)
-                {
-                    for (int x = 0; x < tremX; x++)
-                    {
-                        mapa[playerX + x, playerY + y] = ' ';
-                    }
-                }
-
-                for (int x = 0; x < tremX; x++) //Redesenha o trilho no Y = 5
-                {
-                    mapa[playerX + x, 5] = 'I';
-                }
-
-                for (int x = 0; x < tremX; x++) //Redesenha o trilho no y = 10
-                {
-                    mapa[playerX + x, 10] = 'I';
-                }
-
-                for (int y = 0; y < tremY; y++)
-                {
-                    for (int x = 0; x < tremX; x++)
-                    {
-                        mapa[oldX + x, oldY + y] = trem[y * tremX + x];
-                    }
-                }
-
-                playerX = oldX;
-                playerY = oldY;
             }
 
         }
@@ -163,12 +121,12 @@ namespace Projetto1
             if (!embaixo)
             {
                 embaixo = true;
-                y = 7;
+                pos.y = 7;
             }
             else
             { 
                 embaixo = false;
-                y = 2;
+                pos.y = 2;
             }
         }
         private void GastoCombustivel()
