@@ -49,11 +49,23 @@ namespace Projetto1
                 Console.WriteLine();
             }
 
+            for (int x = 1; x < largura - 1; x++) //desenha o trilho de cima
+            {
+                mapa[x, 5] = 'I';
+            }
+
+            for (int x = 1; x < largura - 1; x++) //desenha o trilho de baixo
+            {
+                mapa[x, 10] = 'I';
+            }
+
         }
 
         public override void Update()
         {
-            DesenharMapa(); 
+            Console.SetCursorPosition(0,0);
+            DesenharMapa();
+            GameManager.Instancia.trem.DesenharLocomotiva();
         }
 
         public override void Start()

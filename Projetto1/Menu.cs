@@ -38,6 +38,7 @@ namespace Projetto1
             {
                 case ConsoleKey.J: //redireciona para a gameplay
                     GameManager.Instancia.jogando = true;
+                    Stop();
                     break;
                 case ConsoleKey.K: //redireciona para créditos
                     Creditos();

@@ -14,13 +14,16 @@ namespace Projetto1
         static public GameManager Instancia => instancia ??= new GameManager(); //manter atributos abaixo do singleton
 
         public bool jogando = false;
+        public Locomotiva trem;
 
         public override void Update() {
             if (jogando) {
+                Mapa mapa = Mapa.Instancia;
+                trem = new Locomotiva();
             }
             else
             {
-                Menu m = Menu.Instancia;
+                Menu menu = Menu.Instancia;
             }
         }
         public override void OnDestroy()

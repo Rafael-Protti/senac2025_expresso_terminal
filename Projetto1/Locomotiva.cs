@@ -33,14 +33,14 @@ namespace Projetto1
         }
         public void DesenharLocomotiva()
         {
-            Console.SetCursorPosition(pos.x, pos.y);
+            
             for (int y = 0; y < tremY; y++) //desenha a locomotiva
             {
                 for (int x = 0; x < tremX; x++)
                 {
+                    Console.SetCursorPosition(pos.x+x, pos.y+y);
                     Console.Write(trem[y * tremX + x]);
                 }
-                Console.WriteLine();
             }
         }
         public void AtualizarPosicao(ConsoleKey tecla)
@@ -54,28 +54,19 @@ namespace Projetto1
             switch (tecla)
             {
                 case ConsoleKey.A:
-                    if (velocidade > 0) { velocidade = velocidade - 5; };
                     break;
                 case ConsoleKey.D:
-                    if (velocidade < 120) { velocidade = velocidade + 5; };
+                    x = pos.Right;  
                     break;
                 case ConsoleKey.F:
-                    Movimento();
-                    oldX += locomocao;
-                    GastoCombustivel();
                     break;
                 case ConsoleKey.W:
-                    embaixo = false;
-                    //tempY--;
                     break;
                 case ConsoleKey.S:
-                    embaixo = true;
-                    //tempY++;
                     break;
                 case ConsoleKey.L:
                     break;
                 case ConsoleKey.M:
-                    combustivel--;
                     break;
                 case ConsoleKey.N:
                     break;
@@ -134,11 +125,6 @@ namespace Projetto1
             combustivel -= locomocao * 10;
             if (playerX <= 50 && playerX >= 40 && playerY == 2 && velocidade > 30)
             { combustivel = combustivel - 2000; }
-        }
-
-        public override void Update()
-        {
-            DesenharLocomotiva();
         }
 
         public override void LateUpdate()
