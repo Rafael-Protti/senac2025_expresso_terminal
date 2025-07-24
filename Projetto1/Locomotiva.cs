@@ -45,18 +45,18 @@ namespace Projetto1
         }
         public void AtualizarPosicao(ConsoleKey tecla)
         {
-
-            int oldX = pos.x;
-            int oldY = pos.y;
+            int oldx = pos.x;
+            int oldy = pos.y;
             int x = pos.x;
             int y = pos.y;
+
+            x = pos.Right; // locomotiva se move sozinha. Substituir pela função de velocidade.
 
             switch (tecla)
             {
                 case ConsoleKey.A:
                     break;
                 case ConsoleKey.D:
-                    x = pos.Right;  
                     break;
                 case ConsoleKey.F:
                     break;
@@ -72,6 +72,12 @@ namespace Projetto1
                     break;
             }
 
+
+
+            //se mov for valido
+            //   pos.x = nova posiçaõ
+            //else
+            //   nao passa 
         }
 
         private void Movimento()

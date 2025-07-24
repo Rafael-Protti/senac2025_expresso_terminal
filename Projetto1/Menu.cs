@@ -38,6 +38,7 @@ namespace Projetto1
             {
                 case ConsoleKey.J: //redireciona para a gameplay
                     GameManager.Instancia.jogando = true;
+                    GameManager.Instancia.trem = new Locomotiva();
                     Stop();
                     break;
                 case ConsoleKey.K: //redireciona para créditos

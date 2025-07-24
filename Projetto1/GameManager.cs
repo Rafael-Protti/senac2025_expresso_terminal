@@ -19,7 +19,7 @@ namespace Projetto1
         public override void Update() {
             if (jogando) {
                 Mapa mapa = Mapa.Instancia;
-                trem = new Locomotiva();
+               
             }
             else
             {
