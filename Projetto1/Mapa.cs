@@ -8,9 +8,7 @@ namespace Projetto1
 {
     public class Mapa : MonoBehaviour
     {
-        private Mapa() {
-            Run();
-        }
+        private Mapa() {Run();}
 
         private static Mapa instancia;
         static public Mapa Instancia => instancia ??= new Mapa();
@@ -38,7 +36,7 @@ namespace Projetto1
                 }
             }
         }
-        private void DesenharMapa()
+        public override void Draw()
         {
             for (int y = 0; y < altura; y++)
             {
@@ -64,8 +62,6 @@ namespace Projetto1
         public override void Update()
         {
             Console.SetCursorPosition(0,0);
-            DesenharMapa();
-            GameManager.Instancia.trem.DesenharLocomotiva();
         }
 
         public override void Start()

@@ -31,7 +31,7 @@ namespace Projetto1
         {
             Run();
         }
-        public void DesenharLocomotiva()
+        public override void Draw()
         {
             
             for (int y = 0; y < tremY; y++) //desenha a locomotiva
@@ -50,25 +50,18 @@ namespace Projetto1
             int x = pos.x;
             int y = pos.y;
 
-            x = pos.Right; // locomotiva se move sozinha. Substituir pela função de velocidade.
+            if (!input) { return; }
+
+            if (velocidade < 60) {x = pos.Right;} // locomotiva se move sozinha. Substituir pela função de velocidade.
+            if (velocidade >= 60 && velocidade <= 90) {x = pos.Right + 10;}
 
             switch (tecla)
             {
                 case ConsoleKey.A:
+                    DiminuirVelocidade();
                     break;
                 case ConsoleKey.D:
-                    break;
-                case ConsoleKey.F:
-                    break;
-                case ConsoleKey.W:
-                    break;
-                case ConsoleKey.S:
-                    break;
-                case ConsoleKey.L:
-                    break;
-                case ConsoleKey.M:
-                    break;
-                case ConsoleKey.N:
+                    AumentarVelocidade();
                     break;
             }
 

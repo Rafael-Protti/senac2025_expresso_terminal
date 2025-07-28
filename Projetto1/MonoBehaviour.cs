@@ -10,6 +10,8 @@ namespace Projetto1
     {
         private Thread thread;
         private bool ativo = true;
+        public bool visible = false;
+        public bool input = false;
 
         public void Run()
         {
@@ -42,5 +44,7 @@ namespace Projetto1
         public virtual void Update() { }
         public virtual void LateUpdate() { }
         public virtual void OnDestroy() { }
+
+        public abstract void Draw();
     }
 }

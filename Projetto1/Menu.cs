@@ -8,13 +8,24 @@ namespace Projetto1
 {
     public class Menu : MonoBehaviour
     {
+        private bool creditos = false;
         private Menu()
         {
             Run();
         }
         private static Menu instancia;
         static public Menu Instancia => instancia ??= new Menu();
+
+        public override void Awake()
+        {
+            //visible = true;
+        }
         public override void Update()
+        {
+            BotoesMenu();
+        }
+
+        public override void Draw()
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Green;
@@ -29,19 +40,24 @@ namespace Projetto1
                  °---------------°
                 """);
             Console.ResetColor();
-            BotoesMenu();
+            Console.WriteLine();
+            Creditos();
         }
         private void BotoesMenu()
         {
+            if (!input) { return; }
+
             var botao = Console.ReadKey (true);
             switch (botao.Key)
             {
                 case ConsoleKey.J: //redireciona para a gameplay
-                    GameManager.Instancia.jogando = true;
-                    GameManager.Instancia.trem = new Locomotiva();
+                    //GameManager.Instancia.jogando = true;
+                    visible = false;
+                    Console.Clear();
                     Stop();
                     break;
                 case ConsoleKey.K: //redireciona para créditos
+                    creditos = true;
                     Creditos();
                     break;
                 case ConsoleKey.L: //fecha o jogo
@@ -52,12 +68,16 @@ namespace Projetto1
         }
         private void Creditos()
         {
-            Console.Clear();
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("Instrutor: Marcius \nCriador: Rafael Protti");
-            Console.ResetColor();
-            Console.WriteLine("\nAperte qualquer tecla para voltar.");
-            Console.ReadKey();
+            if (creditos == true)
+            {
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("Instrutor: Marcius \nCriador: Rafael Protti");
+                Console.ResetColor();
+                Console.WriteLine("\nAperte qualquer tecla para voltar.");
+                Console.ReadKey(true);
+                creditos = false;
+            }
+
         }
     }
 }
