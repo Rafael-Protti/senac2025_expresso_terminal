@@ -17,15 +17,15 @@ namespace Projetto1
 
         public int playerX;
         public int playerY;
-        string trem = "        ____ __   _______ |[]|-||_  |_____|-|_____(_)  o=o=o  00=OO=o/\\o";
-        public int tremX = 18;
+        string trem = "        ____ __  _______ |[]|-||_ |_____|-|_____(_) o=o=o  00=OO=o/\\";
+        public int tremX = 17;
         public int tremY = 4;
         public int velocidade = 0;
         public bool embaixo = false;
         public int locomocao;
         public int combustivel = 10000;
 
-        Vector2 pos = new Vector2(1, 1);
+        public Vector2 pos = new Vector2(1, 1);
 
         public Locomotiva()
         {
@@ -124,6 +124,11 @@ namespace Projetto1
             combustivel -= locomocao * 10;
             if (playerX <= 50 && playerX >= 40 && playerY == 2 && velocidade > 30)
             { combustivel = combustivel - 2000; }
+        }
+
+        public override void Update()
+        {
+            
         }
 
         public override void LateUpdate()

@@ -7,6 +7,7 @@ namespace Projetto1
 
         static void Main()
         {
+            Console.CursorVisible = false;
             GameManager GM = GameManager.Instancia;
         }
     }

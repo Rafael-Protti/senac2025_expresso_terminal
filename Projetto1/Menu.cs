@@ -8,13 +8,14 @@ namespace Projetto1
 {
     public class Menu : MonoBehaviour
     {
-        private bool creditos = false;
         private Menu()
         {
             Run();
         }
         private static Menu instancia;
         static public Menu Instancia => instancia ??= new Menu();
+
+        private bool creditos = false;
 
         public override void Awake()
         {
@@ -27,9 +28,11 @@ namespace Projetto1
 
         public override void Draw()
         {
-            Console.Clear();
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("""
+            if (!creditos)
+            {
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write("""
                 .-----------------.
                 |EXPRESSO TERMINAL|
                 º-----------------°
@@ -39,9 +42,14 @@ namespace Projetto1
                  |-> Sair     [L]|
                  °---------------°
                 """);
-            Console.ResetColor();
-            Console.WriteLine();
-            Creditos();
+                Console.ResetColor();
+                Console.WriteLine();
+            }
+            else
+            {
+                Creditos();
+            }
+
         }
         private void BotoesMenu()
         {
@@ -51,14 +59,17 @@ namespace Projetto1
             switch (botao.Key)
             {
                 case ConsoleKey.J: //redireciona para a gameplay
-                    //GameManager.Instancia.jogando = true;
-                    visible = false;
+                    GameManager GM = GameManager.Instancia;
+                    GM.menu.visible = false;
+                    GM.mapa.visible = true;
+                    GM.trem.visible = true;
+                    GM.trem.input = true;
+                    GM.menu.input = false;
                     Console.Clear();
                     Stop();
                     break;
                 case ConsoleKey.K: //redireciona para créditos
                     creditos = true;
-                    Creditos();
                     break;
                 case ConsoleKey.L: //fecha o jogo
                     GameManager.Instancia.Stop();
@@ -68,15 +79,17 @@ namespace Projetto1
         }
         private void Creditos()
         {
-            if (creditos == true)
-            {
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine("Instrutor: Marcius \nCriador: Rafael Protti");
-                Console.ResetColor();
-                Console.WriteLine("\nAperte qualquer tecla para voltar.");
-                Console.ReadKey(true);
-                creditos = false;
-            }
+            Console.Clear ();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("Professor: Marcius");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("Auxiliador: Alexandre Sant Ana Cavaleiro");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Criador: Rafael Protti");
+            Console.ResetColor();
+            Console.WriteLine("\nAperte qualquer tecla para voltar.");
+            Console.ReadKey(true);
+            creditos = false;
 
         }
     }

@@ -28,6 +28,7 @@ namespace Projetto1
             menu.input = true;
         }
         public override void Update() {
+            Console.SetCursorPosition(0, 0);
             Draw();
         }
 
@@ -40,6 +41,7 @@ namespace Projetto1
 
         public override void LateUpdate()
         {
+            if (trem.input == true) { int x = trem.pos.Right; }
         }
         public override void OnDestroy()
         {

@@ -16,6 +16,7 @@ namespace Projetto1
         public char[,] mapa; //variável CHAR que é usada para desenhar o mapa
         public int largura = 185; //largura (X) do mapa
         public int altura = 16; //altura (Y) do mapa
+
         private void IniciarMapa()
         {
             mapa = new char[largura, altura];
@@ -38,6 +39,7 @@ namespace Projetto1
         }
         public override void Draw()
         {
+            GameManager GM2 = GameManager.Instancia;
             for (int y = 0; y < altura; y++)
             {
                 for (int x = 0; x < largura; x++)
@@ -57,11 +59,15 @@ namespace Projetto1
                 mapa[x, 10] = 'I';
             }
 
+
+
+            Console.Write("Velocidade: " + GM2.trem.velocidade);
+
         }
 
         public override void Update()
         {
-            Console.SetCursorPosition(0,0);
+            
         }
 
         public override void Start()
