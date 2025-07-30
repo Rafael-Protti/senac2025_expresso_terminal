@@ -41,7 +41,7 @@ namespace Projetto1
 
         public override void LateUpdate()
         {
-            if (trem.input == true) { int x = trem.pos.Right; }
+            if (trem.input == true) { trem.Movimento();} //movimento automático da locomotiva.
         }
         public override void OnDestroy()
         {

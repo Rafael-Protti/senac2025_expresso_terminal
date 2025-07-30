@@ -14,10 +14,10 @@ namespace Projetto1
         //private Locomotiva() { }
         //private static Locomotiva instancia;
         //static public Locomotiva Instancia => instancia??=new Locomotiva();
-
+        //Pixel trem = new Pixel();
+        string trem = "        ____ __  _______ |[]|-||_ |_____|-|_____(_) o=o=o  00=OO=o/\\";
         public int playerX;
         public int playerY;
-        string trem = "        ____ __  _______ |[]|-||_ |_____|-|_____(_) o=o=o  00=OO=o/\\";
         public int tremX = 17;
         public int tremY = 4;
         public int velocidade = 0;
@@ -25,7 +25,7 @@ namespace Projetto1
         public int locomocao;
         public int combustivel = 10000;
 
-        public Vector2 pos = new Vector2(1, 1);
+        public Vector2 pos = new Vector2(1, 2);
 
         public Locomotiva()
         {
@@ -33,6 +33,7 @@ namespace Projetto1
         }
         public override void Draw()
         {
+            Console.ForegroundColor = ConsoleColor.Cyan;
             
             for (int y = 0; y < tremY; y++) //desenha a locomotiva
             {
@@ -42,6 +43,7 @@ namespace Projetto1
                     Console.Write(trem[y * tremX + x]);
                 }
             }
+            Console.ResetColor();
         }
         public void AtualizarPosicao(ConsoleKey tecla)
         {
@@ -52,9 +54,6 @@ namespace Projetto1
 
             if (!input) { return; }
 
-            if (velocidade < 60) {x = pos.Right;} // locomotiva se move sozinha. Substituir pela função de velocidade.
-            if (velocidade >= 60 && velocidade <= 90) {x = pos.Right + 10;}
-
             switch (tecla)
             {
                 case ConsoleKey.A:
@@ -63,39 +62,26 @@ namespace Projetto1
                 case ConsoleKey.D:
                     AumentarVelocidade();
                     break;
+                case ConsoleKey.W:
+                    embaixo = true;
+                    TrocarTrilho();
+                    break;
+                case ConsoleKey.S:
+                    embaixo = false;
+                    TrocarTrilho();
+                    break;
             }
-
-
-
-            //se mov for valido
-            //   pos.x = nova posiçaõ
-            //else
-            //   nao passa 
         }
 
-        private void Movimento()
+        public void Movimento()
         {
-            if (velocidade == 0) { locomocao = 0; }
-            if (velocidade >= 5 && velocidade <= 25)
+            locomocao = velocidade / 12;
+            if (velocidade > 0)
             {
-                locomocao = 1; //andar 1 espaço
+                pos.x = pos.Right + locomocao; // controla a velocidade da locomotiva
+                GastoCombustivel();
             }
-            if (velocidade >= 26 && velocidade <= 55)
-            {
-                locomocao = 2; //andar 2 espaços
-            }
-            if (velocidade >= 56 && velocidade <= 75)
-            {
-                locomocao = 3; //andar 3 espaços
-            }
-            if (velocidade >= 76 && velocidade <= 95)
-            {
-                locomocao = 4; //andar 4 espaços
-            }
-            if (velocidade >= 96 && velocidade <= 120)
-            {
-                locomocao = 5; //andar 5 espaços
-            }
+            
         }
         private void AumentarVelocidade()
         {
@@ -108,22 +94,16 @@ namespace Projetto1
 
         private void TrocarTrilho()
         {
-            if (!embaixo)
+            if (velocidade > 0)
             {
-                embaixo = true;
-                pos.y = 7;
-            }
-            else
-            { 
-                embaixo = false;
-                pos.y = 2;
+                combustivel -= 100;
+                if (!embaixo) { pos.y = 7; }
+                else { pos.y = 2; }
             }
         }
         private void GastoCombustivel()
         {
             combustivel -= locomocao * 10;
-            if (playerX <= 50 && playerX >= 40 && playerY == 2 && velocidade > 30)
-            { combustivel = combustivel - 2000; }
         }
 
         public override void Update()

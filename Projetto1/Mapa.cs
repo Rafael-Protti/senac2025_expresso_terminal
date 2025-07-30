@@ -13,13 +13,16 @@ namespace Projetto1
         private static Mapa instancia;
         static public Mapa Instancia => instancia ??= new Mapa();
 
-        public char[,] mapa; //variável CHAR que é usada para desenhar o mapa
+        public Pixel[,] mapa; //variável CHAR que é usada para desenhar o mapa
         public int largura = 185; //largura (X) do mapa
         public int altura = 16; //altura (Y) do mapa
+        public Pixel parede = new Pixel('#',ConsoleColor.Red);
+        public Pixel espaco = new Pixel(' ',ConsoleColor.Black);
+        public Pixel trilho = new Pixel('I',ConsoleColor.DarkGray);
 
         private void IniciarMapa()
         {
-            mapa = new char[largura, altura];
+            mapa = new Pixel[largura, altura];
 
             for (int y = 0; y < altura; y++)
             {
@@ -28,41 +31,49 @@ namespace Projetto1
                     //ultima posição do vetor é tamanho -1, pois começa no ZERO!!!!!!!!!!!!!!!!!!!!!!!!!!
                     if (x == 0 || y == 0 || x == largura - 1 || y == altura - 1)
                     {
-                        mapa[x, y] = '#';
+                        mapa[x, y] = parede;
+                    }
+                    else if (y == 5 || y == 10)
+                    {
+                        mapa[x, y] = trilho;
                     }
                     else
                     {
-                        mapa[x, y] = ' ';
+                        mapa[x, y] = espaco;
                     }
                 }
             }
         }
         public override void Draw()
         {
-            GameManager GM2 = GameManager.Instancia;
+            DesenharMapa();
+            Interface();
+        }
+
+        private void DesenharMapa()
+        {
+            
             for (int y = 0; y < altura; y++)
             {
                 for (int x = 0; x < largura; x++)
                 {
-                    Console.Write(mapa[x, y]);
+                    mapa[x,y].Show();
                 }
                 Console.WriteLine();
             }
+        }
 
-            for (int x = 1; x < largura - 1; x++) //desenha o trilho de cima
-            {
-                mapa[x, 5] = 'I';
-            }
+        private void Interface()
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+            GameManager GM2 = GameManager.Instancia;
+            Console.Write($"""
 
-            for (int x = 1; x < largura - 1; x++) //desenha o trilho de baixo
-            {
-                mapa[x, 10] = 'I';
-            }
-
-
-
-            Console.Write("Velocidade: " + GM2.trem.velocidade);
-
+                Velocidade: {GM2.trem.velocidade}
+                Combustível: {GM2.trem.combustivel}
+                Distância: {GM2.trem.pos.x}
+                """);
+            Console.ResetColor();
         }
 
         public override void Update()
