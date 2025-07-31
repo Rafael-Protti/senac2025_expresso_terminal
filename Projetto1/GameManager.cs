@@ -17,7 +17,6 @@ namespace Projetto1
         static public GameManager Instancia => instancia ??= new GameManager(); //manter atributos abaixo do singleton
 
         public bool jogando = false;
-        public Locomotiva trem = new Locomotiva();
         public Menu menu = Menu.Instancia;
         public Mapa mapa = Mapa.Instancia;
 
@@ -30,18 +29,18 @@ namespace Projetto1
         public override void Update() {
             Console.SetCursorPosition(0, 0);
             Draw();
+            
         }
 
         public override void Draw()
         {
             if (menu.visible) { menu.Draw();}
             if (mapa.visible) { mapa.Draw();}
-            if (trem.visible) { trem.Draw();}
         }
 
         public override void LateUpdate()
         {
-            if (trem.input == true) { trem.Movimento();} //movimento automático da locomotiva.
+           if (mapa.trem.input == true) { mapa.trem.Movimento();} //movimento automático da locomotiva.
         }
         public override void OnDestroy()
         {

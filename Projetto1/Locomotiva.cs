@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 
 namespace Projetto1
 {
-    class Locomotiva : MonoBehaviour
+    public class Locomotiva : MonoBehaviour
     {
         //private Locomotiva() { }
         //private static Locomotiva instancia;
@@ -34,16 +34,18 @@ namespace Projetto1
         public override void Draw()
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
-            
             for (int y = 0; y < tremY; y++) //desenha a locomotiva
             {
                 for (int x = 0; x < tremX; x++)
                 {
                     Console.SetCursorPosition(pos.x+x, pos.y+y);
                     Console.Write(trem[y * tremX + x]);
+                    
                 }
             }
             Console.ResetColor();
+            Console.SetCursorPosition(0, 0);
+            
         }
         public void AtualizarPosicao(ConsoleKey tecla)
         {
@@ -115,6 +117,7 @@ namespace Projetto1
         {
             var tecla = Console.ReadKey(true).Key;
             AtualizarPosicao(tecla);
+            
         }
     }
 }

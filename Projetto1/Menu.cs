@@ -30,7 +30,7 @@ namespace Projetto1
         {
             if (!creditos)
             {
-                Console.Clear();
+                Console.SetCursorPosition(0,0);
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write("""
                 .-----------------.
@@ -62,8 +62,8 @@ namespace Projetto1
                     GameManager GM = GameManager.Instancia;
                     GM.menu.visible = false;
                     GM.mapa.visible = true;
-                    GM.trem.visible = true;
-                    GM.trem.input = true;
+                    GM.mapa.trem.visible = true;
+                    GM.mapa.trem.input = true;
                     GM.menu.input = false;
                     Console.Clear();
                     Stop();
@@ -90,6 +90,7 @@ namespace Projetto1
             Console.WriteLine("\nAperte qualquer tecla para voltar.");
             Console.ReadKey(true);
             creditos = false;
+            Console.Clear();
 
         }
     }

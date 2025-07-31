@@ -16,12 +16,14 @@ namespace Projetto1
         public Pixel[,] mapa; //variável CHAR que é usada para desenhar o mapa
         public int largura = 185; //largura (X) do mapa
         public int altura = 16; //altura (Y) do mapa
-        public Pixel parede = new Pixel('#',ConsoleColor.Red);
-        public Pixel espaco = new Pixel(' ',ConsoleColor.Black);
-        public Pixel trilho = new Pixel('I',ConsoleColor.DarkGray);
+        public Pixel parede = new Pixel("#",ConsoleColor.Red);
+        public Pixel espaco = new Pixel(" ",ConsoleColor.Black);
+        public Pixel trilho = new Pixel("I",ConsoleColor.DarkGray);
+        public Locomotiva trem = new Locomotiva();
 
         private void IniciarMapa()
         {
+            
             mapa = new Pixel[largura, altura];
 
             for (int y = 0; y < altura; y++)
@@ -48,11 +50,13 @@ namespace Projetto1
         {
             DesenharMapa();
             Interface();
+            if (trem.visible) { trem.Draw(); }
         }
 
         private void DesenharMapa()
         {
             
+
             for (int y = 0; y < altura; y++)
             {
                 for (int x = 0; x < largura; x++)
@@ -66,12 +70,11 @@ namespace Projetto1
         private void Interface()
         {
             Console.ForegroundColor = ConsoleColor.White;
-            GameManager GM2 = GameManager.Instancia;
             Console.Write($"""
 
-                Velocidade: {GM2.trem.velocidade}
-                Combustível: {GM2.trem.combustivel}
-                Distância: {GM2.trem.pos.x}
+                Velocidade: {trem.velocidade}
+                Combustível: {trem.combustivel}
+                Distância: {trem.pos.x}
                 """);
             Console.ResetColor();
         }

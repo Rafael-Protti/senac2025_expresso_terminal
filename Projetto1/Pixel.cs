@@ -8,10 +8,10 @@ namespace Projetto1
 {
     public class Pixel
     {
-        public char icone;
+        public string icone;
         public ConsoleColor cor;
 
-        public Pixel(char icone, ConsoleColor cor)
+        public Pixel(string icone, ConsoleColor cor)
         {
             this.icone = icone;
             this.cor = cor;

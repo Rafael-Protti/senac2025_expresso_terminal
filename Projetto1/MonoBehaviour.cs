@@ -23,7 +23,7 @@ namespace Projetto1
                     while (ativo) {
                         Update();
                         LateUpdate();
-                        Thread.Sleep(500);
+                        Thread.Sleep(200);
                     }
                     
                 }
