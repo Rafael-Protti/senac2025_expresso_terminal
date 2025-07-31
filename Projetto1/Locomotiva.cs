@@ -44,7 +44,7 @@ namespace Projetto1
                 }
             }
             Console.ResetColor();
-            Console.SetCursorPosition(0, 0);
+            
             
         }
         public void AtualizarPosicao(ConsoleKey tecla)

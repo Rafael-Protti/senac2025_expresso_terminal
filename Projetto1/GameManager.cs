@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Projetto1
 {
-    internal class GameManager : MonoBehaviour
+    public class GameManager : MonoBehaviour
     {
         private GameManager() 
         {
