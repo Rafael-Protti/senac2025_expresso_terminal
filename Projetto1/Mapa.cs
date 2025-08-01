@@ -17,17 +17,17 @@ namespace Projetto1
         public Pixel[,] mapa; //variável CHAR que é usada para desenhar o mapa
         public int largura = 185; //largura (X) do mapa
         public int altura = 16; //altura (Y) do mapa
-        public Pixel parede = new Pixel("#",ConsoleColor.Red);
-        public Pixel espaco = new Pixel(" ",ConsoleColor.Black);
-        public Pixel trilho = new Pixel("I",ConsoleColor.DarkGray);
+        public Pixel parede = new Pixel('#',ConsoleColor.Red);
+        public Pixel espaco = new Pixel(' ',ConsoleColor.Black);
+        public Pixel trilho = new Pixel('I',ConsoleColor.DarkGray);
         public Locomotiva trem = new Locomotiva();
-        public Pixel subida_pixel = new Pixel("|||", ConsoleColor.Yellow);
-        public Pixel descida_pixel = new Pixel("iii", ConsoleColor.DarkYellow);
+        public Pixel subida_pixel = new Pixel('|', ConsoleColor.Yellow);
+        public Pixel descida_pixel = new Pixel('i', ConsoleColor.DarkYellow);
 
         private void IniciarMapa()
         {
-            Obstaculos subida = new Obstaculos(subida_pixel);
-            Obstaculos descida = new Obstaculos(descida_pixel);
+            Obstaculos subida = new Obstaculos(subida_pixel, mapa);
+            Obstaculos descida = new Obstaculos(descida_pixel, mapa);
             do { subida.Randomizer(); descida.Randomizer(); } while (subida.posicao.y == descida.posicao.y);
 
             mapa = new Pixel[largura, altura];
@@ -48,13 +48,13 @@ namespace Projetto1
                     }
                     else
                     {
-                        mapa[subida.posicao.x, subida.posicao.y] = subida.forma;
-                        mapa[descida.posicao.x, descida.posicao.y] = descida.forma;
                         mapa[x, y] = espaco;
                     }
                     
                 }
             }
+            subida.DesenharObstaculos(); descida.DesenharObstaculos();
+            
         }
         public override void Draw()
         {
