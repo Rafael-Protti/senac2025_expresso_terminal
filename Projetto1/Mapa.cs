@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Intrinsics.X86;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,8 +27,8 @@ namespace Projetto1
 
         private void IniciarMapa()
         {
-            Obstaculos subida = new Obstaculos(subida_pixel, mapa);
-            Obstaculos descida = new Obstaculos(descida_pixel, mapa);
+            Obstaculos subida = new Obstaculos(subida_pixel);
+            Obstaculos descida = new Obstaculos(descida_pixel);
             do { subida.Randomizer(); descida.Randomizer(); } while (subida.posicao.y == descida.posicao.y);
 
             mapa = new Pixel[largura, altura];
@@ -53,8 +54,17 @@ namespace Projetto1
                     
                 }
             }
-            subida.DesenharObstaculos(); descida.DesenharObstaculos();
-            
+            for (int x = subida.posicao.x; x < subida.distancia; x++)
+            {
+                mapa[x, subida.posicao.y] = subida.forma;
+            }
+            for (int x = descida.posicao.x; x < descida.distancia; x++)
+            {
+                mapa[x, descida.posicao.y] = descida.forma;
+            }
+            //subida.DesenharObstaculos();
+            //descida.DesenharObstaculos();
+
         }
         public override void Draw()
         {

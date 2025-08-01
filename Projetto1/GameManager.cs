@@ -23,8 +23,7 @@ namespace Projetto1
 
         public override void Awake()
         {
-            menu.visible = true;
-            menu.input = true;
+            
         }
         public override void Update() {
             Console.SetCursorPosition(0, 0);

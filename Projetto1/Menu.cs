@@ -19,7 +19,8 @@ namespace Projetto1
 
         public override void Awake()
         {
-            //visible = true;
+            visible = true;
+            input = true;
         }
         public override void Update()
         {
@@ -30,7 +31,6 @@ namespace Projetto1
         {
             if (!creditos)
             {
-                Console.SetCursorPosition(0,0);
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write("""
                 .-----------------.
@@ -43,7 +43,7 @@ namespace Projetto1
                  °---------------°
                 """);
                 Console.ResetColor();
-                Console.WriteLine();
+               
             }
             else
             {
@@ -69,6 +69,7 @@ namespace Projetto1
                     Stop();
                     break;
                 case ConsoleKey.K: //redireciona para créditos
+                    input = false;
                     creditos = true;
                     break;
                 case ConsoleKey.L: //fecha o jogo
@@ -90,6 +91,7 @@ namespace Projetto1
             Console.WriteLine("\nAperte qualquer tecla para voltar.");
             Console.ReadKey(true);
             creditos = false;
+            input = true;
             Console.Clear();
 
         }

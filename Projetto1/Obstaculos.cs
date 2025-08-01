@@ -14,10 +14,10 @@ public class Obstaculos
 
     public Pixel[,] matriz;
 
-    public Obstaculos(Pixel forma, Pixel[,] matriz)
+    public Obstaculos(Pixel forma)
     {
         this.forma = forma;
-        this.matriz = matriz;
+        //this.matriz = matriz;
     }
 
     public void Randomizer()
@@ -36,8 +36,8 @@ public class Obstaculos
 
     public void DesenharObstaculos()
     {
-        for (int x = posicao.x; x < distancia; x++)
-        {
+       for (int x = posicao.x; x < distancia; x++)
+        { 
             matriz[x, posicao.y] = forma;
         }
     }
