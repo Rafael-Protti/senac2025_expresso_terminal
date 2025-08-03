@@ -18,83 +18,96 @@ namespace Projetto1
         public Pixel[,] mapa; //variável CHAR que é usada para desenhar o mapa
         public int largura = 185; //largura (X) do mapa
         public int altura = 16; //altura (Y) do mapa
-        public Pixel parede = new Pixel('#',ConsoleColor.Red);
-        public Pixel espaco = new Pixel(' ',ConsoleColor.Black);
-        public Pixel trilho = new Pixel('I',ConsoleColor.DarkGray);
-        public Locomotiva trem = new Locomotiva();
-        public Pixel subida_pixel = new Pixel('|', ConsoleColor.Yellow);
-        public Pixel descida_pixel = new Pixel('i', ConsoleColor.DarkYellow);
+        public Vector2 pos = new Vector2(0,0);
+        public Locomotiva locomotiva = new Locomotiva();
 
-        private void IniciarMapa()
+        public Nivel nivel = new Nivel();
+
+        public void IniciarMapa()
         {
-            Obstaculos subida = new Obstaculos(subida_pixel);
-            Obstaculos descida = new Obstaculos(descida_pixel);
-            do { subida.Randomizer(); descida.Randomizer(); } while (subida.posicao.y == descida.posicao.y);
+            Pixel parede = new Pixel("#", ConsoleColor.Red, 1, 1, pos);
+            Pixel espaco = new Pixel(" ", ConsoleColor.Black, 1, 1, pos);
+            Pixel trilho = new Pixel("I", ConsoleColor.DarkGray, 1, 1, pos);
+            Pixel subida_pixel = new Pixel("|", ConsoleColor.Yellow, 1, 1, pos);
+            Pixel descida_pixel = new Pixel("i", ConsoleColor.DarkYellow, 1, 1, pos);
+            Pixel flecha = new Pixel(">", ConsoleColor.DarkMagenta, 1, 1, pos);
+            Obstaculos subida = new Obstaculos(subida_pixel, nivel.fase);
+            Obstaculos descida = new Obstaculos(descida_pixel, nivel.fase);
+            Pixel trem = new Pixel(locomotiva.tremdesenho, ConsoleColor.Cyan, locomotiva.tremX, locomotiva.tremY, locomotiva.pos);
 
             mapa = new Pixel[largura, altura];
 
-            for (int y = 0; y < altura; y++)
+            for (pos.y = 0; pos.y < altura; pos.y++)
             {
-                for (int x = 0; x < largura; x++)
+                for (pos.x = 0; pos.x < largura; pos.x++)
                 {
                     //ultima posição do vetor é tamanho -1, pois começa no ZERO!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    if (x == 0 || y == 0 || x == largura - 1 || y == altura - 1)
+                    if (pos.x == 0 || pos.y == 0 || pos.x == largura - 1 || pos.y == altura - 1)
                     {
-                        mapa[x, y] = parede;
+                        mapa[pos.x, pos.y] = parede;
                     }
-                    else if (y == 5 || y == 10)
+                    else if (pos.y == 5 || pos.y == 10)
                     {
-                        mapa[x, y] = trilho;
-                        
+                        mapa[pos.x, pos.y] = trilho;
+                    }
+                    else if (pos.x == 165)
+                    {
+                        mapa[pos.x, pos.y] = flecha;
+                    }
+                    else if (pos.x == 1)
+                    {
+                        mapa[pos.x, pos.y] = trem;
                     }
                     else
                     {
-                        mapa[x, y] = espaco;
+                        mapa[pos.x, pos.y] = espaco;
                     }
-                    
+                    mapa[1, 3] = espaco; mapa[1, 4] = espaco; mapa[1, 8] = espaco; mapa[1, 9] = espaco;
                 }
             }
-            for (int x = subida.posicao.x; x < subida.distancia; x++)
+            for (int z = 0; z < nivel.fase; z++)
             {
-                mapa[x, subida.posicao.y] = subida.forma;
+                do { subida.Randomizer(); descida.Randomizer(); } while (subida.pos.y == descida.pos.y || subida.pos.x == descida.pos.y);
+                for (pos.x = subida.pos.x; pos.x < subida.distancia; pos.x++)
+                {
+                    mapa[pos.x, subida.pos.y] = subida.forma;
+                }
+                for (pos.x = descida.pos.x; pos.x < descida.distancia; pos.x++)
+                {
+                    mapa[pos.x, descida.pos.y] = descida.forma;
+                }
             }
-            for (int x = descida.posicao.x; x < descida.distancia; x++)
-            {
-                mapa[x, descida.posicao.y] = descida.forma;
-            }
-            //subida.DesenharObstaculos();
-            //descida.DesenharObstaculos();
-
         }
         public override void Draw()
         {
             DesenharMapa();
             Interface();
-            if (trem.visible) { trem.Draw(); }
+            //if (locomotiva.visible) { locomotiva.Draw(); }
         }
 
         private void DesenharMapa()
         {
-            
-
-            for (int y = 0; y < altura; y++)
+            for (pos.y = 0; pos.y < altura; pos.y++)
             {
-                for (int x = 0; x < largura; x++)
+                for (pos.x = 0; pos.x < largura; pos.x++)
                 {
-                    mapa[x,y].Show();
+                    mapa[pos.x,pos.y].Show();
                 }
-                Console.WriteLine();
             }
         }
 
         private void Interface()
         {
             Console.ForegroundColor = ConsoleColor.White;
+            Console.BackgroundColor = ConsoleColor.Black;
             Console.Write($"""
 
-                Velocidade: {trem.velocidade}
-                Combustível: {trem.combustivel}
-                Distância: {trem.pos.x}
+                Velocidade ( km/h ): {locomotiva.velocidade} 
+                Combustível ( % ): {locomotiva.combporcento} 
+                Carga ( ton ): {locomotiva.carga} 
+                Distância ( km ): {locomotiva.distancia} 
+
+                Nível : {nivel.fase}
                 """);
             Console.ResetColor();
         }

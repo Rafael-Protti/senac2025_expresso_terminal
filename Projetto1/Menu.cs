@@ -19,6 +19,7 @@ namespace Projetto1
 
         public override void Awake()
         {
+            Console.Clear();
             visible = true;
             input = true;
         }
@@ -62,8 +63,8 @@ namespace Projetto1
                     GameManager GM = GameManager.Instancia;
                     GM.menu.visible = false;
                     GM.mapa.visible = true;
-                    GM.mapa.trem.visible = true;
-                    GM.mapa.trem.input = true;
+                    GM.mapa.locomotiva.visible = true;
+                    GM.mapa.locomotiva.input = true;
                     GM.menu.input = false;
                     Console.Clear();
                     Stop();

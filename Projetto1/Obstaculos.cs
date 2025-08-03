@@ -5,8 +5,9 @@ namespace Projetto1;
 public class Obstaculos
 {
     public Pixel forma;
+    public int quantia;
 
-    public Vector2 posicao = new Vector2(1, 1);
+    public Vector2 pos = new Vector2(1, 1);
 
     public Random random = new Random();
 
@@ -14,31 +15,24 @@ public class Obstaculos
 
     public Pixel[,] matriz;
 
-    public Obstaculos(Pixel forma)
+    public Obstaculos(Pixel forma, int quantia)
     {
         this.forma = forma;
+        this.quantia = quantia;
         //this.matriz = matriz;
     }
 
-    public void Randomizer()
+    public void Randomizer() //Criar listas que armazenam os valores dos lugares antigos dos obstáculos. Usa essas lista para não repetir posições.
     {
-        posicao.x = random.Next(20, 181);
+        pos.x = random.Next(20, 155);
         if (random.Next(2) == 0)
         {
-            posicao.y = 5;
+            pos.y = 5;
         }
         else
         {
-            posicao.y = 10;
+            pos.y = 10;
         }
-        distancia = posicao.x + random.Next(1, 11);
-    }
-
-    public void DesenharObstaculos()
-    {
-       for (int x = posicao.x; x < distancia; x++)
-        { 
-            matriz[x, posicao.y] = forma;
-        }
+        distancia = pos.x + random.Next(1, 11);
     }
 }
