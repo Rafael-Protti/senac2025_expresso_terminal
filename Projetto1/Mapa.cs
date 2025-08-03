@@ -31,8 +31,8 @@ namespace Projetto1
             Pixel subida_pixel = new Pixel("|", ConsoleColor.Yellow, 1, 1, pos);
             Pixel descida_pixel = new Pixel("i", ConsoleColor.DarkYellow, 1, 1, pos);
             Pixel flecha = new Pixel(">", ConsoleColor.DarkMagenta, 1, 1, pos);
-            Obstaculos subida = new Obstaculos(subida_pixel, nivel.fase);
-            Obstaculos descida = new Obstaculos(descida_pixel, nivel.fase);
+            Obstaculos subida = new Obstaculos(subida_pixel, nivel.dificuldade);
+            Obstaculos descida = new Obstaculos(descida_pixel, nivel.dificuldade);
             Pixel trem = new Pixel(locomotiva.tremdesenho, ConsoleColor.Cyan, locomotiva.tremX, locomotiva.tremY, locomotiva.pos);
 
             mapa = new Pixel[largura, altura];
@@ -65,17 +65,14 @@ namespace Projetto1
                     mapa[1, 3] = espaco; mapa[1, 4] = espaco; mapa[1, 8] = espaco; mapa[1, 9] = espaco;
                 }
             }
-            for (int z = 0; z < nivel.fase; z++)
+            for (int z = 0; z < nivel.dificuldade; z++)
             {
-                do { subida.Randomizer(); descida.Randomizer(); } while (subida.pos.y == descida.pos.y || subida.pos.x == descida.pos.y);
-                for (pos.x = subida.pos.x; pos.x < subida.distancia; pos.x++)
-                {
-                    mapa[pos.x, subida.pos.y] = subida.forma;
-                }
-                for (pos.x = descida.pos.x; pos.x < descida.distancia; pos.x++)
-                {
-                    mapa[pos.x, descida.pos.y] = descida.forma;
-                }
+                do {
+                    subida.Randomizer(); descida.Randomizer();
+                } while (subida.pos.y == descida.pos.y || subida.pos.x == descida.pos.x) ;
+
+                mapa[subida.pos.x, subida.pos.y] = subida.forma;
+                mapa[descida.pos.x, descida.pos.y] = descida.forma;
             }
         }
         public override void Draw()
@@ -112,9 +109,27 @@ namespace Projetto1
             Console.ResetColor();
         }
 
+        public void RedesenharMapa() //Classe que redesenha o mapa após a conclusão de um nível.
+        {
+            
+            if (locomotiva.pos.x >= 165)
+            {
+                locomotiva.percorrido += locomotiva.pos.x;
+                locomotiva.pos.x = 1;
+                nivel.ProxNivel();
+                IniciarMapa();
+                locomotiva.velocidade = 0;
+            }
+        }
+
         public override void Update()
         {
             
+        }
+
+        public override void LateUpdate()
+        {
+            if (locomotiva.input == true) { locomotiva.Movimento(); } //movimento automático da locomotiva.
         }
 
         public override void Start()

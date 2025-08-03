@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Projetto1;
 
@@ -8,10 +9,9 @@ public class Obstaculos
     public int quantia;
 
     public Vector2 pos = new Vector2(1, 1);
+    public int[] registro = new int[] {}; 
 
     public Random random = new Random();
-
-    public int distancia;
 
     public Pixel[,] matriz;
 
@@ -24,7 +24,16 @@ public class Obstaculos
 
     public void Randomizer() //Criar listas que armazenam os valores dos lugares antigos dos obstáculos. Usa essas lista para não repetir posições.
     {
-        pos.x = random.Next(20, 155);
+        int numero;
+        do
+        {
+            numero = random.Next(20, 165);
+            if (registro.All(x => x != numero && x + 10 < numero && x - 10 > numero))
+            {
+                registro.Append(numero);
+                pos.x = numero;
+            }
+        } while (!registro.All(x => x != pos.x));
         if (random.Next(2) == 0)
         {
             pos.y = 5;
@@ -33,6 +42,5 @@ public class Obstaculos
         {
             pos.y = 10;
         }
-        distancia = pos.x + random.Next(1, 11);
     }
 }

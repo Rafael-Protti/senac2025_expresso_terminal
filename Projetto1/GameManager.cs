@@ -31,7 +31,6 @@ namespace Projetto1
         {
             Console.SetCursorPosition(0, 0);
             Draw();
-
         }
 
         public override void Draw()
@@ -42,15 +41,7 @@ namespace Projetto1
 
         public override void LateUpdate()
         {
-            if (mapa.locomotiva.input == true) { mapa.locomotiva.Movimento(); } //movimento automático da locomotiva.
-            if (mapa.locomotiva.pos.x >= 165) //Evitar de deixar as lógicas na GM. Trocar por função.
-            {
-                mapa.locomotiva.percorrido += mapa.locomotiva.pos.x;
-                mapa.locomotiva.pos.x = 1;
-                mapa.nivel.ProxNivel();
-                mapa.IniciarMapa();
-
-            }
+            mapa.RedesenharMapa();
         }
         public override void OnDestroy()
         {
