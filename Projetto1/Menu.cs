@@ -63,8 +63,6 @@ namespace Projetto1
                     GameManager GM = GameManager.Instancia;
                     GM.menu.visible = false;
                     GM.mapa.visible = true;
-                    GM.mapa.locomotiva.visible = true;
-                    GM.mapa.locomotiva.input = true;
                     GM.menu.input = false;
                     Console.Clear();
                     Stop();
@@ -74,6 +72,7 @@ namespace Projetto1
                     creditos = true;
                     break;
                 case ConsoleKey.L: //fecha o jogo
+                    Console.Clear();
                     GameManager.Instancia.Stop();
                     Stop();
                     break;

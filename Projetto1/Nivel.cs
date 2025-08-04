@@ -14,15 +14,17 @@ namespace Projetto1
     {
         public int fase;
         public int dificuldade;
+        public int nivelmax;
         public Nivel()
         {
             fase = 1;
-            dificuldade = 2;
+            dificuldade = 1;
         }
 
         public void ProxNivel()
         {
             fase += 1;
+            nivelmax += 1;
             dificuldade *= 2;
         }
     }

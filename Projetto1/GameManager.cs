@@ -42,10 +42,59 @@ namespace Projetto1
         public override void LateUpdate()
         {
             mapa.RedesenharMapa();
+            if (mapa.locomotiva.recursos.carga <= 0)
+            {
+                mapa.Stop();
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("""
+                Você derrubou toda a carga.
+                Fim de jogo!
+                """);
+                Console.ResetColor();
+                Stop();
+            }
+            if (mapa.locomotiva.recursos.combustivel <= 0)
+            {
+                mapa.Stop();
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine("""
+                Seu combustível acabou.
+                Fim de jogo!
+                """);
+                Stop();
+            }
+            if (mapa.locomotiva.recursos.carga <= 0 && mapa.locomotiva.combporcento <= 0)
+            {
+                mapa.Stop();
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine("""
+                Toda a carga foi derrubada e todo combustível foi gasto. Que incompetência.
+                Fim de jogo!
+                """);
+                Stop();
+            }
+            if (mapa.locomotiva.distancia == 165 * 3)
+            {
+                mapa.Stop();
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.WriteLine($"""
+                Parabéns! Você conseguiu chegar na estação.
+                Carga entregue (ton): {mapa.locomotiva.recursos.carga}
+                Combustivel retante (%): {mapa.locomotiva.combporcento}
+                Fim de jogo!
+                """);
+                Stop();
+            }
         }
         public override void OnDestroy()
         {
-            Console.Clear();
+            Console.WriteLine();
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Obrigado por jogar!");
         }
 

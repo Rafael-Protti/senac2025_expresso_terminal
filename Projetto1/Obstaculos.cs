@@ -9,7 +9,8 @@ public class Obstaculos
     public int quantia;
 
     public Vector2 pos = new Vector2(1, 1);
-    public int[] registro = new int[] {}; 
+    public List<int> registrox = new List<int>();
+    public List<int> registroy = new List<int>();
 
     public Random random = new Random();
 
@@ -28,19 +29,35 @@ public class Obstaculos
         do
         {
             numero = random.Next(20, 165);
-            if (registro.All(x => x != numero && x + 10 < numero && x - 10 > numero))
+            if (registrox.All(x => x != numero))
             {
-                registro.Append(numero);
                 pos.x = numero;
             }
-        } while (!registro.All(x => x != pos.x));
+        } while (!registrox.All(x => x != pos.x));
+
         if (random.Next(2) == 0)
         {
             pos.y = 5;
+
         }
         else
         {
             pos.y = 10;
         }
+        registrox.Add(pos.x);
+        registroy.Add(pos.y);
+    }
+
+    public void LimparListas()
+    {
+        registrox.Clear(); registroy.Clear();
+    }
+
+    public void LimparUltimo()
+    {
+        int contadorx = registrox.Count - 1;
+        int contadory = registroy.Count - 1;
+        registrox.RemoveAt(contadorx);
+        registroy.RemoveAt(contadory);
     }
 }

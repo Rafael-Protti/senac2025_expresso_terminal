@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -25,14 +26,14 @@ namespace Projetto1
         public int velocidade = 0;
         public bool embaixo = false;
         public int locomocao;
-        public int combustivel = 10000;
+        public static int combustivel = 10000;
         public float combporcento;
-        public int carga = 10;
+        public static int carga = 10;
         public int distancia = 0;
         public int percorrido = 0;
         
-
         public Vector2 pos = new Vector2(1, 2);
+        public Recursos recursos = new Recursos(combustivel, carga);
 
         public Locomotiva()
         {
@@ -76,44 +77,44 @@ namespace Projetto1
                     TrocarTrilho();
                     break;
                 case ConsoleKey.R:
-                    combustivel -= 100;
+                    recursos.combustivel -= 100;
                     break;
             }
         }
 
         public void Movimento()
         {
-            locomocao = velocidade / 12 + 1;
-            combporcento = combustivel * 100 / 10000;
+            locomocao = velocidade / 50;
+            combporcento = recursos.combustivel * 100 / 10000;
             if (velocidade > 0)
             {
                 pos.x = pos.Right + locomocao; // controla a velocidade da locomotiva
-                GastoCombustivel();
+                PerdaPassiva();
                 distancia = pos.x + percorrido;
             }
             
         }
         private void AumentarVelocidade()
         {
-            if (velocidade < 120) { velocidade += 10; }
+            if (velocidade < 100) { velocidade += 20; }
         }
         private void DiminuirVelocidade()
         {
-            if (velocidade > 0) { velocidade -= 10; }
+            if (velocidade > 0) { velocidade -= 20; }
         }
 
         private void TrocarTrilho()
         {
             if (velocidade > 0)
             {
-                combustivel -= 100;
+                recursos.combustivel -= 100;
                 if (!embaixo) { pos.y = 7; }
                 else { pos.y = 2; }
             }
         }
-        private void GastoCombustivel()
+        private void PerdaPassiva()
         {
-            combustivel -= locomocao * 10;
+            recursos.combustivel -= locomocao * 10;
         }
 
         public override void Update()
